@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-      <a class="navbar-brand" href="#!">HuntFreelanser</a>
+      <a class="navbar-brand cursor-pointer" @click="logoClick">HuntFreelancer</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -15,13 +15,17 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul v-if="isUserLogined" class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="#">Проекты</a></li>
-          <li class="nav-item"><a class="nav-link" href="#!">Заказчики</a></li>
-          <li class="nav-item"><a class="nav-link" href="#!">Кабинет</a></li>
+          <li class="nav-item"><a class="nav-link cursor-pointer">Проекты</a></li>
+          <li class="nav-item"><a class="nav-link cursor-pointer">Заказчики</a></li>
+          <li class="nav-item"><a class="nav-link cursor-pointer">Кабинет</a></li>
         </ul>
         <ul v-else class="navbar-nav ms-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">
+            <a
+                @click="authClick"
+                class="nav-link active cursor-pointer"
+                aria-current="page"
+                >
               Авторизоваться
             </a>
           </li>
@@ -37,17 +41,26 @@ import { isObjectEmpty } from "../utils";
 
 const NavBar = {
     data: () => ({
-        isUserLogined: false
+        isUserLogined: true
     }),
     computed: {
         ...mapGetters([
             "getUser"
         ]),
     },
+    mounted() {
+        // this.checkUser();
+    },
     methods: {
         checkUser() {
             const token = localStorage.getItem("AUTH_TOKEN");
             this.isUserLogined = token !== null && !isObjectEmpty(this.getUser);
+        },
+        authClick() {
+            this.$router.push('/auth');
+        },
+        logoClick() {
+            this.$router.push(this.isUserLogined ? '/user/5' : '/')
         }
     },
 };
